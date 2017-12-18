@@ -17,6 +17,7 @@ forecast_col = 'Adj. Close'
 df.fillna(-99999, inplace=True)
 
 forecast_out = int(math.ceil(0.01*len(df)))
+print(forecast_out)
 
 df['label'] = df[forecast_col].shift(-forecast_out)
 df.dropna(inplace=True)
@@ -28,7 +29,7 @@ y = np.array(df['label'])
 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
-clf = LinearRegression()
+clf = LinearRegression(n_jobs=-1)
 # fit is synonimus of train
 # score is synonimus of test
 clf.fit(X_train, y_train)
