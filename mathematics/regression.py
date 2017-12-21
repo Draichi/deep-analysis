@@ -39,12 +39,17 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 
 # This commented black avoids to train
 # data every time
+
 ''' clf = LinearRegression(n_jobs=-1)
 # fit is synonimus of train
 clf.fit(X_train, y_train)
 # we pickle here to avoid to train everytime
 with open('linearregression.pickle', 'wb') as f:
     pickle.dump(clf, f) '''
+
+
+
+
 
 pickle_in = open('linearregression.pickle', 'rb')
 clf = pickle.load(pickle_in)
@@ -66,7 +71,7 @@ for i in forecast_set:
     next_unix += one_day
     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
 
-print(df.tail())
+# print(df.tail())
 
 df['Adj. Close'].plot()
 df['Forecast'].plot()
