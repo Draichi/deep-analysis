@@ -7,7 +7,7 @@ style.use('ggplot')
 class Support_Vector_Machine:
     def __init__(self, visualization=True):
         self.visualization = visualization
-        self.colors = {1:'r', -1:'b'}
+        self.colors = {1:'b', -1:'r'}
         if self.visualization:
             self.fig = plt.figure()
             self.ax = self.fig.add_subplot(1,1,1)
@@ -32,6 +32,7 @@ class Support_Vector_Machine:
         # big steps first
         setp_sizes = [self.max_feature_value * 0.1,
                       self.max_feature_value * 0.01,
+                      # ]
                       # point of expense:
                       self.max_feature_value * 0.001]
         # 5 = extremely expensive
@@ -85,6 +86,7 @@ class Support_Vector_Machine:
             self.w = opt_choice[0]
             self.b = opt_choice[1]
             latest_optimum = opt_choice[0][0] + step * 2
+            
         ############
         # this is just to print the optimization steps
         for i in self.data:
@@ -104,7 +106,7 @@ class Support_Vector_Machine:
     
     # this vizualize function is important only for humans
     def vizualize(self):
-        [[self.ax.scatter(x[0], x[1], s=100, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
+        [[self.ax.scatter(x[0], x[1], s=200, color=self.colors[i]) for x in data_dict[i]] for i in data_dict]
         # v = x.w+b
         # positive support vector = 1
         # negative support vector = -1
@@ -135,12 +137,12 @@ class Support_Vector_Machine:
         plt.show()
 
 data_dict = {-1:np.array([ [1,7], [2,8], [3,8] ]), 
-            1:np.array([ [5,1], [6,-1], [7,3] ])}
+            1:np.array([ [9,1], [6,-1], [7,0] ])}
 
 svm = Support_Vector_Machine()
 svm.fit(data=data_dict)
 
-predict_us = [[0,10], [1,3], [3,4], [3,5], [5,5], [5,6], [6,-5], [5,8]]
+predict_us = [[0,10], [2,7], [4,5], [5,6], [4,5], [3,-1], [6,0], [8,-2], [5,8]]
 for p in predict_us:
     svm.predict(p)
 
