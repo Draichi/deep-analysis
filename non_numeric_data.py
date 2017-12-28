@@ -3,7 +3,7 @@ from matplotlib import style
 style.use('ggplot')
 import numpy as np
 from sklearn.cluster import KMeans
-from sklearn import preprocessing, cross_validation
+from sklearn import preprocessing
 import pandas as pd
 
 '''
@@ -57,4 +57,31 @@ def handle_non_numerical_data(df):
             df[column] = list(map(convert_to_int, df[column]))
     return df
 df = handle_non_numerical_data(df)
-print(df.head())
+# print(df.head())
+
+# increase accuracy
+df.drop(['ticket', 'sex'], 1, inplace=True)
+
+X = np.array(df.drop(['survived'], 1).astype(float))
+X = preprocessing.scale(X)
+y = np.array(df['survived'])
+
+clf = KMeans(n_clusters=2)
+clf.fit(X)
+
+correct = 0
+for i in range(len(X)):
+    # we never use this in supervised learning
+    # because here, it just gonna make this prediction based
+    # on the location of that centroid
+    predict_me = np.array(X[i].astype(float))
+    predict_me = predict_me.reshape(-1, len(predict_me))
+    prediction = clf.predict(predict_me)
+    if prediction[0] == y[i]:
+        correct += 1
+
+# the order of cluster is totally arbitrary, so if we had
+# 0.28 is the same of 0.72
+# the order is just inverted
+# print(df.head())
+print('Accuracy:',correct/len(X))
