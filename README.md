@@ -15,5 +15,5 @@
 ## Custom K means
 ![custom_k_means](/screenshots/custom_k_means.png?raw=true "custom_k_means")
 
-## Custom K means
+## Custom mean shift
 ![custom_mean_shift](/screenshots/custom-mean-shift.png?raw=true "custom_mean_shift")
