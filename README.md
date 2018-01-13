@@ -13,7 +13,7 @@
 ![svm_scratch](/screenshots/svm_scratch.png?raw=true "svm_scratch")
 
 ## Custom K means
-![custoom_k_means](/screenshots/custoom_k_means.png?raw=true "custoom_k_means")
+![custom_k_means](/screenshots/custom_k_means.png?raw=true "custom_k_means")
 
 ## Custom K means
-![custoom_mean_shift](/screenshots/custoom-mean-shift.png?raw=true "custoom_mean_shift")
+![custom_mean_shift](/screenshots/custom-mean-shift.png?raw=true "custom_mean_shift")
