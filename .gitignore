@@ -1,2 +1,4 @@
 # SQLite3 databse files:
 *.db
+
+/stock_dfs
