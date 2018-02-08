@@ -14,7 +14,7 @@
 ![regression_google_data](/screenshots/google_data_zoom.png?raw=true "regression_google_data")
 
 ## SP500 Correlation Heatmap
-![sp500](/screenshots/sp_500_corelation_heatmap.png?raw=true "sp500 heatmap")
+![sp500](/screenshots/sp500_corelation_heatmap.png?raw=true "sp500 heatmap")
 
 ## SVM from scratch
 ![svm_scratch](/screenshots/svm_scratch.png?raw=true "svm_scratch")
