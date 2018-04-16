@@ -4,14 +4,14 @@ style.use('ggplot')
 import numpy as np
 from sklearn.datasets.samples_generator import make_blobs
 
-X, y = make_blobs(n_samples=50, centers=3, n_features=2)
+X, y = make_blobs(n_samples=40, centers=3, n_features=2)
 
 #X = np.array([[1,2],[1.5,1.8],[5,8],[8,2],[9,1],[10,3],[8,8],[1,0.6],[9,11]])
 
-''' plt.scatter(X[:,0], X[:,1], s=150)
-plt.show() '''
+# plt.scatter(X[:,0], X[:,1], s=150)
+# plt.show()
 
-colors = 10*["g","r","b","k","o","p"]
+colors = ["g","r","b","k","o","p"]
 
 class Mean_Shift:
     def __init__(self, radius=None, radius_norm_step=100):
