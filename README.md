@@ -1,27 +1,31 @@
-# Machine Learning w/ Ptyhon
+# Deep analysis w/ cryptos
 
 ![python](https://forthebadge.com/images/badges/made-with-python.svg "python")
 ![responsability](https://forthebadge.com/images/badges/powered-by-responsibility.svg "responsability")
 ![snooplion](https://forthebadge.com/images/badges/certified-snoop-lion.svg "snooplion")
 
-### Tesla Open/High/Low/Close
+<!-- ### Tesla Open/High/Low/Close
 
 ![tesla](/screenshots/tesla_ohlc.png?raw=true "tesla")
-![tesla zoom](/screenshots/tesla_ohlc_zoom.png?raw=true "tesla zoom")
+![tesla zoom](/screenshots/tesla_ohlc_zoom.png?raw=true "tesla zoom") -->
 
 ## Build setup for deep-analysis
 
 >https://blog.patricktriest.com/analyzing-cryptocurrencies-python/
 
-then run:
+don't forget to:
 
 `source activate cryptocurrency-analysis`
 
-### Regression and prediction w/ google data
+to install the theme:
+
+`pip install jupyterthemes`
+`jt -t chesterish`
+<!-- ### Regression and prediction w/ google data
 
 ![regression_google_data](/screenshots/regression_google_data.png?raw=true "regression_google_data")
 ![regression_google_data](/screenshots/google_data.png?raw=true "regression_google_data")
-![regression_google_data](/screenshots/google_data_zoom.png?raw=true "regression_google_data")
+![regression_google_data](/screenshots/google_data_zoom.png?raw=true "regression_google_data") -->
 
 <!-- ### SP500 Correlation Heatmap
 

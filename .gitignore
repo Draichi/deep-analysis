@@ -1,4 +1,7 @@
 # SQLite3 databse files:
 *.db
 
+# pickle
+*.pkl
+
 /stock_dfs
