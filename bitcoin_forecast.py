@@ -15,28 +15,34 @@ from mpl_finance import candlestick_ohlc
 
 style.use('ggplot')
 
-df = quandl.get('BITSTAMP/USD')
+# df = quandl.get('BITSTAMP/USD')
 #df = quandl.get('BTER/ZECBTC')
+
+load_df = open('BCHARTS-BITSTAMPUSD.pkl', 'rb')
+df = pickle.load(load_df)
+
+# print(df.head())
+# quit()
 
 """
 percent of change => ( Close - Open ) / Open * 100
 high low percent  => ( High - Close ) / Close * 100
 """
 
-df['HL_PCT'] = (df['High'] - df['Last']) / df['Last'] * 100
-df['PCT_Change'] = (df['Last'] - df['Bid']) / df['Bid'] * 100
+df['HL_PCT'] = (df['High'] - df['Close']) / df['Close'] * 100
+df['PCT_Change'] = (df['Close'] - df['Open']) / df['Open'] * 100
 
-df = df[['Last', 'HL_PCT', 'PCT_Change', 'Volume']]
+df = df[['Close', 'HL_PCT', 'PCT_Change', 'Volume (Currency)']]
 
-print(df.tail())
+# print(df.tail())
 
 df.fillna(-99999, inplace = True)
 
-forecast_col = 'Last'
+forecast_col = 'Close'
 
-forecast_out = int(math.ceil(0.005*len(df)))
+forecast_out = int(math.ceil(0.001*len(df)))
 
-print(df.tail())
+# print(df.tail())
 
 
 df['label'] = df[forecast_col].shift(-forecast_out)
@@ -44,6 +50,9 @@ df['label'] = df[forecast_col].shift(-forecast_out)
 X = np.array(df.drop(['label'], 1))
 X = preprocessing.scale(X)
 X_lately = X[-forecast_out:]
+
+# print(df['label'])
+# quit()
 X = X[:-forecast_out]
 
 df.dropna(inplace=True)
@@ -97,7 +106,7 @@ for i in forecast_set:
 
 # plt.show()
 
-df['Last'].plot()
+df['Close'].plot()
 df['Forecast'].plot()
 plt.legend(loc=4)
 plt.xlabel('Date')
