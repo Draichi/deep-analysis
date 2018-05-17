@@ -48,6 +48,7 @@ X = X[:-forecast_out]
 
 df.dropna(inplace=True)
 
+print(df.head())
 print(df.tail())
 
 y = np.array(df['label'])
