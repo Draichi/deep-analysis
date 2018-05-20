@@ -15,11 +15,18 @@ from mpl_finance import candlestick_ohlc
 
 style.use('ggplot')
 
-# df = quandl.get('BITSTAMP/USD')
 #df = quandl.get('BTER/ZECBTC')
 
-load_df = open('BCHARTS-BITSTAMPUSD.pkl', 'rb')
-df = pickle.load(load_df)
+try:
+    f = open('datasets/BCHARTS-BITSTAMPUSD.pkl', 'rb')
+    df = pickle.load(f)
+    print('-- data loaded from cache')
+except (OSError, IOError) as e:
+    print('-- downloading data from quandl')
+    df = quandl.get('BITSTAMP/USD', returns="pandas")
+    with open('datasets/BCHARTS-BITSTAMPUSD.pkl', 'wb') as ff:
+        pickle.dump(df, ff)
+    print('-- cached data')
 
 # print(df.head())
 # quit()
@@ -66,11 +73,11 @@ X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_
 
 clf = LinearRegression(n_jobs=10)
 clf.fit(X_train, y_train)
-with open('bitstamp.pickle', 'wb') as f:
-    pickle.dump(clf, f)
+# with open('datasets/bitstamp.pickle', 'wb') as f:
+#     pickle.dump(clf, f)
 
-# pickle_in = open('bitstamp.pickle', 'rb')
-# clf = pickle.load(pickle_in)
+pickle_in = open('datasets/bitstamp.pkl', 'rb')
+clf = pickle.load(pickle_in)
 
 accuracy = clf.score(X_test, y_test)
 forecast_set = clf.predict(X_lately)

@@ -1,0 +1,7 @@
+[
+  { 
+    "key": "ctrl+enter",
+    "command": "jupyter.execCurrentCell",
+    "when": "editorTextFocus"
+  }
+]

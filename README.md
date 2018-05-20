@@ -3,8 +3,8 @@
 ![python](https://forthebadge.com/images/badges/made-with-python.svg "python")
 ![steve](https://forthebadge.com/images/badges/certified-steve-bruhle.svg "steve")
 
-
 ## Required
+
 - python 3
 - anaconda
 
@@ -31,7 +31,6 @@ $ jupyter notebook
 ![google_data](screenshots/google_data.png "google_data")
 
 ------------
-
 
 ##### to install the theme chesterish on jupyter notebook:
 
