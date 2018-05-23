@@ -15,7 +15,7 @@ style.use('ggplot')
 #df.to_csv('tsla.csv')
 
 # column 0 (dates) will be the index column
-df = pd.read_csv('tsla.csv', parse_dates=True, index_col=0)
+df = pd.read_csv('datasets/tsla.csv', parse_dates=True, index_col=0)
 
 # moving average will take the last 100 day prices and take the average of them today, min_periods will avoid NaN
 # df['100ma'] = df['Adj Close'].rolling(window=100, min_periods=0).mean()
