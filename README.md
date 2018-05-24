@@ -27,8 +27,7 @@ $ jupyter notebook
 ```
 
 ------------
-#### Google data w/ forecast
-![google_data](screenshots/google_data.png "google_data")
+![google_data](screenshots/tsla-analysis.png "google_data")
 
 ------------
 
