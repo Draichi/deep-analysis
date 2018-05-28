@@ -5,3 +5,4 @@
 *.pkl
 
 /stock_dfs
+/node_modules
