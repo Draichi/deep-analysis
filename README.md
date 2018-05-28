@@ -28,13 +28,9 @@ $ jupyter notebook
 
 ------------
 <div>
-    <a href="https://plot.ly/~randy_marsh/4/?share_key=CEeOuTr5cwy5ooFWtc7PR2" target="_blank" title="lucas" style="display: block; text-align: center;"><img src="https://plot.ly/~randy_marsh/4.png?share_key=CEeOuTr5cwy5ooFWtc7PR2" alt="lucas" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
-    <script data-plotly="randy_marsh:4" sharekey-plotly="CEeOuTr5cwy5ooFWtc7PR2" src="https://plot.ly/embed.js" async></script>
+  <a href="https://plot.ly/~randy_marsh/4/?share_key=CEeOuTr5cwy5ooFWtc7PR2" target="_blank" title="lucas" style="display: block; text-align: center;"><img src="https://plot.ly/~randy_marsh/4.png?share_key=CEeOuTr5cwy5ooFWtc7PR2" alt="lucas" style="max-width: 100%;width: 600px;"  width="600" onerror="this.onerror=null;this.src='https://plot.ly/404.png';" /></a>
+  <script data-plotly="randy_marsh:4" sharekey-plotly="CEeOuTr5cwy5ooFWtc7PR2" src="https://plot.ly/embed.js" async></script>
 </div>
-
-<iframe width="900" height="800" frameborder="0" scrolling="no" src="//plot.ly/~randy_marsh/4.embed"></iframe>
-
-<!-- ![google_data](screenshots/tsla-analysis.png "google_data") -->
 
 ------------
 

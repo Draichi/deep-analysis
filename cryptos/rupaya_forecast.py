@@ -17,9 +17,13 @@ style.use('ggplot')
 
 # dataframe
 # RUPX/USD
-df = pd.read_csv('rupaya_11-08-2017_16-05-2018.csv', decimal=",")
+df = pd.read_csv('datasets/rupaya_11-08-2017_16-05-2018.csv', decimal=",")
 
 df = df[['Data','Open', 'High', 'Low', 'Close', 'Volume',]]
+
+print(df.head())
+print(df.tail())
+quit()
 
 # High x Low percent
 df['HL_PCT'] = (df['High'] - df['Close']) / df['Close'] * 100.0
@@ -108,8 +112,8 @@ print('\x1b[1;33;40m   ---  Forecast out:', forecast_out, 'days \x1b[0m')
 
 df['Forecast'] = np.nan
 
-# last_date = df.iloc[-1].Data
-# last_unix = last_date.timestamp()
+last_date = df.iloc[-1].Data
+last_unix = last_date.timestamp()
 one_day = 86400
 next_unix = last_unix + one_day
 

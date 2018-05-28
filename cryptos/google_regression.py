@@ -1,19 +1,25 @@
 import pandas as pd
-import quandl, math, datetime
-# numpy is better to use arrays
+import quandl, math, datetime, pickle
 import numpy as np
-# preprocessing is used to scaling the features data
-# cross-validation will be used to train and test
+import matplotlib.pyplot as plt
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
-import matplotlib.pyplot as plt
 from matplotlib import style
-import pickle
 
 style.use('ggplot')
 
+try:
+    f = open('datasets/GOOGL-27-05.pkl', 'rb')
+    df = pickle.load(f)
+    print('-- data loaded from cache')
+except (OSError, IOError) as e:
+    print('-- downloading data from quandl')
+    df = quandl.get('WIKI/GOOGL', returns="pandas")
+    with open('datasets/GOOGL-27-05.pkl', 'wb') as ff:
+        pickle.dump(df, ff)
+    print('-- cached data')
+
 # dataframe
-df = quandl.get('WIKI/GOOGL')
 df = df[['Adj. Open', 'Adj. High', 'Adj. Low', 'Adj. Close', 'Adj. Volume',]]
 
 # High x Low percent
@@ -23,7 +29,6 @@ df['PCT_change'] = (df['Adj. Close'] - df['Adj. Open']) / df['Adj. Open'] * 100.
 
 df = df[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
 
-
 # Featues are the attribuites who made the label, 
 # and label is some sort of prediction into the future
 # LABEL => 'Adj. Close'
@@ -32,7 +37,6 @@ df = df[['Adj. Close', 'HL_PCT', 'PCT_change', 'Adj. Volume']]
 
 forecast_col = 'Adj. Close'
 
-# fill 'not avaible' data with -99999
 df.fillna(-99999, inplace=True)
 
 # let's say the length of df was a number that was
@@ -40,23 +44,21 @@ df.fillna(-99999, inplace=True)
 # math.ceil will round that up to 1 (float)
 # this will be the number of days out,
 # we gonna try to predict out 1% of dataframe 
-forecast_out = int(math.ceil(0.01*len(df)))
 
-# We shift the column negatively, this way, the label 
-# columns for each row will be adjusted close price
-# 10% (dataframe) into future
+forecast_out = int(math.ceil(0.001*len(df)))
+
 df['label'] = df[forecast_col].shift(-forecast_out)
-#print(df.head())
 
-''' # if we wnat to print the tail
+# if we wnat to print the tail
 # we'll need to drop the 'na's before
-df.dropna(inplace=True)
-print(df.tail()) '''
+# df.dropna(inplace=True)
+# print(df.tail())
 
 
 X = np.array(df.drop(['label'], 1))
 X = preprocessing.scale(X)
 X_lately = X[-forecast_out:]
+
 # we made that shift so here we want to
 # make sure that we only have X's where
 # we have values for y
@@ -65,45 +67,36 @@ X = X[:-forecast_out]
 df.dropna(inplace=True)
 y = np.array(df['label'])
 
-# 20% of data we gonna use as test data
-# this will shuffe the data maintaining the correlation
-# between X's and y's
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
 
-
 ################
-''' 
-# Uncomment this black to train
-# data every time
-
+ 
 # classifier:
 # n_jobs=10 will run 10 jobs at a time
 # n_jobs=-1 will run as many jobs as possible
 clf = LinearRegression(n_jobs=10)
 # clf = svm.SVR()
-# fit is synonimus of train
 clf.fit(X_train, y_train)
-# we pickle here to avoid to train everytime
-with open('linearregression.pickle', 'wb') as f:
+with open('datasets/model_GOOGL-21-05.pkl', 'wb') as f:
     pickle.dump(clf, f)
 
- '''
+##################
+
+# load the alredy trained data
+# pickle_in = open('datasets/model_GOOGL-21-05.pkl', 'rb')
+# clf = pickle.load(pickle_in)
+
 ##################
 
 
-# load the alredy trained data
-pickle_in = open('linearregression.pickle', 'rb')
-clf = pickle.load(pickle_in)
-
-# score is synonimus of test
 accuracy = clf.score(X_test, y_test)
 forecast_set = clf.predict(X_lately)
-# print(forecast_set)
+
 print('\x1b[1;33;40m   ---  Accuracy:', accuracy, '\x1b[0m')
 print('\x1b[1;33;40m   ---  Forecast out:', forecast_out, 'days \x1b[0m')
 
-''' df['Forecast'] = np.nan
+df['Forecast'] = np.nan
 
 last_date = df.iloc[-1].name
 last_unix = last_date.timestamp()
@@ -115,11 +108,9 @@ for i in forecast_set:
     next_unix += one_day
     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
 
-# print(df.tail())
-
 df['Adj. Close'].plot()
 df['Forecast'].plot()
 plt.legend(loc=4)
 plt.xlabel('Date')
 plt.ylabel('Price')
-plt.show() '''
+plt.show()
