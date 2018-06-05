@@ -1,4 +1,5 @@
 # source activate tensorflow
+# dectivate
 import numpy as np
 import matplotlib
 matplotlib.use('agg')
