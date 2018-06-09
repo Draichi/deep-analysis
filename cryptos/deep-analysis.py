@@ -123,9 +123,10 @@ def df_scatter(df,
                 'data': trace_arr, 
                 'layout': layout
             }, 
-            image = 'png'
+            image = 'png',
+            filename = '{}.html'.format(title.replace(" ", "_")),
+            image_filename = title
         )
-        # py.plot(fig)
         
 # df_scatter(btc_usd_datasets, 'BITCOIN PRICES (USD) BY EXCAHNGES')
 
@@ -175,8 +176,43 @@ combined_df = merge_dfs_on_column(list(altcoin_data.values()), list(altcoin_data
 combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
 
 # scale can be 'linear' or 'log'
-df_scatter(combined_df,
-           'CRYPTO PRICES (USD)',
-           separate_y_axis=False,
-           y_axis_label='Coin Value (USD)',
-           scale='log')
+# df_scatter(combined_df,
+#            'CRYPTO PRICES (USD)',
+#            separate_y_axis=False,
+#            y_axis_label='Coin Value (USD)',
+#            scale='log')
+
+combined_df_2016 = combined_df[combined_df.index.year == 2016]
+combined_df_2016.pct_change().corr(method='pearson')
+
+combined_df_2017 = combined_df[combined_df.index.year == 2017]
+combined_df_2017.pct_change().corr(method='pearson')
+
+combined_df_2018 = combined_df[combined_df.index.year == 2018]
+combined_df_2018.pct_change().corr(method='pearson')
+
+def correlation_heatmap(df, title, absolute_bounds=True):
+    '''plot a correlation heatmap for the entire dataframe'''
+    heatmap = go.Heatmap(
+        z=df.corr(method='pearson').as_matrix(),
+        x=df.columns,
+        y=df.columns,
+        colorbar=dict(title='Pearson Coefficient')
+    )
+    layout = go.Layout(title=title)
+    
+    if absolute_bounds:
+        heatmap['zmax'] = 1.0
+        heatmap['zmin'] = -1.0
+    
+    offline.plot(
+        {
+            'data': [heatmap], 
+            'layout': layout
+        }, 
+        image = 'png',
+        filename = '{}.html'.format(title.replace(" ", "_")),
+        image_filename = title
+    )
+
+correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")

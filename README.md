@@ -1,7 +1,6 @@
 # Deep analysis w/ cryptocurrency
 
 ![python](https://forthebadge.com/images/badges/made-with-python.svg "python")
-![steve](https://forthebadge.com/images/badges/certified-steve-bruhle.svg "steve")
 
 ## Required
 
