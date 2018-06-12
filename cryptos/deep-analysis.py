@@ -25,21 +25,9 @@ def get_quandl_data(quandl_id):
     return df
 
 # --------------------------------------------------------------->
-# gettin BTC data and plotting
-# uncomment the following:
-#btc_usd_price_kraken.head()
-btc_usd_price_kraken = get_quandl_data('BCHARTS/KRAKENUSD')
-btc_trace = go.Scatter(
-    x=btc_usd_price_kraken.index,
-    y=btc_usd_price_kraken['Weighted Price']
-)
-# py.iplot([btc_trace])
-
-# --------------------------------------------------------------->
 # gettin pricing data for 3more BTC exchanges
-exchanges = ['COINBASE', 'BITSTAMP', 'ITBIT']
+exchanges = ['COINBASE', 'BITSTAMP', 'ITBIT', 'KRAKEN']
 exchange_data = {}
-exchange_data['KRAKEN'] = btc_usd_price_kraken
 
 for exchange in exchanges:
     exchange_code = 'BCHARTS/{}USD'.format(exchange)
@@ -128,7 +116,6 @@ def df_scatter(df,
             image_filename = title
         )
         
-# df_scatter(btc_usd_datasets, 'BITCOIN PRICES (USD) BY EXCAHNGES')
 
 def get_json_data(json_url, path):
     # download and cache json data, return as dataframe
@@ -216,3 +203,10 @@ def correlation_heatmap(df, title, absolute_bounds=True):
     )
 
 correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")
+df_scatter(
+    combined_df,
+    'CRYPTO PRICES (USD)',
+    separate_y_axis=False,
+    y_axis_label='Coin Value (USD)',
+    scale='log'
+)

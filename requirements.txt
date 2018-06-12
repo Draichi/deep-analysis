@@ -1,0 +1,4 @@
+quandl
+numpy
+pandas
+plotly

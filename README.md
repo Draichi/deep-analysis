@@ -21,6 +21,8 @@ $ source activate cryptocurrency-analysis
 
 $ conda install numpy pandas nb_conda jupyter plotly quandl
 
+pip install -r requeriments.txt
+
 $ jupyter notebook
 
 ```
