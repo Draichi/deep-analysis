@@ -1,3 +1,4 @@
+import argparse
 import numpy as np 
 import pandas as pd
 from collections import Counter 
@@ -5,14 +6,22 @@ import pickle, warnings
 from sklearn import svm, model_selection, neighbors
 from sklearn.ensemble import VotingClassifier, RandomForestClassifier
 from termcolor import cprint
+#------------------------------------------------------------->
 
 warnings.filterwarnings("ignore", category=DeprecationWarning)
+#------------------------------------------------------------->
+
+parser = argparse.ArgumentParser(description='Deep analysis of cryptocurrencies')
+parser.add_argument('-d', '--days', type=int, default=0, help='7')
+parser.add_argument('-c', '--change', type=float, default=0, help='0.02')
+parser.add_argument('-$', '--coin', type=str, default=0, help='BTC')
+args = parser.parse_args()
 
 #------------------------------------------------------------->
-HOW_MANY_DAYS      = 7
-REQUIREMENT        = 0.05
+HOW_MANY_DAYS      = args.days
+REQUIREMENT        = args.change
 DATABASE           = 'datasets/altcoins_joined_closes.csv'
-COIN               = 'ETH'
+COIN               = args.coin
 DATABASE_INDEX_COL = 0
 #------------------------------------------------------------->
 df = pd.read_csv(DATABASE, index_col=DATABASE_INDEX_COL)
@@ -24,7 +33,7 @@ cprint(
         COIN, 
         REQUIREMENT*100, 
         HOW_MANY_DAYS
-    ), 
+    ),
     'yellow'
 )
 #------------------------------------------------------------->
@@ -47,19 +56,15 @@ def process_data_for_labels(ticker):
     df.fillna(0, inplace=True)
     return tickers, df
 
-
 #------------------------------------------------------------->
 def extract_featuresets(ticker):
     tickers, df = process_data_for_labels(ticker)
-
-    df['{}_target'.format(ticker)] = list(map( buy_sell_hold,
-                                               df['{}_1d'.format(ticker)],
-                                               df['{}_2d'.format(ticker)],
-                                               df['{}_3d'.format(ticker)],
-                                               df['{}_4d'.format(ticker)],
-                                               df['{}_5d'.format(ticker)],
-                                               df['{}_6d'.format(ticker)],
-                                               df['{}_7d'.format(ticker)]))
+    
+    for i in range(1, HOW_MANY_DAYS+1):
+        df['{}_target'.format(COIN)] = list(map(
+            buy_sell_hold,
+            df['{}_{}d'.format(COIN,i)]
+        ))
 
     vals     = df['{}_target'.format(ticker)].values.tolist()
     str_vals = [str(i) for i in vals]
