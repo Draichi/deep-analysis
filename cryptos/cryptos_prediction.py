@@ -87,19 +87,29 @@ def extract_featuresets(ticker):
 #------------------------------------------------------------->
 def train_the_clf(ticker):
     x, y, df = extract_featuresets(ticker)
-    x_train, x_test, y_train, y_test = model_selection.train_test_split(x,
-                                                                         y,
-                                                                         test_size=0.2)
-    clf = VotingClassifier([('lsvc', svm.LinearSVC()),
-                            ('knn', neighbors.KNeighborsClassifier()),
-                            ('rfor', RandomForestClassifier())])
+    x_train, x_test, y_train, y_test = model_selection.train_test_split(
+        x,
+        y,
+        test_size=0.2
+    )
+    clf = VotingClassifier([
+        ('lsvc', svm.LinearSVC()),
+        ('knn', neighbors.KNeighborsClassifier()),
+        ('rfor', RandomForestClassifier())
+    ])
     clf.fit(x_train, y_train)
 
     confidence  = clf.score(x_test, y_test)
     predictions = clf.predict(x_test)
 
-    cprint('\n~~> Spread prediction: {}'.format(Counter(predictions)), 'magenta')
-    cprint('\n~~> Accuracy: {0:.3f} %'.format(confidence*100), 'magenta')
+    cprint(
+        '\n~~> Spread prediction: {}'.format(Counter(predictions)),
+        'magenta'
+    )
+    cprint(
+        '\n~~> Accuracy: {0:.3f} %'.format(confidence*100), 
+        'magenta'
+    )
     print_div()
     
     return confidence
