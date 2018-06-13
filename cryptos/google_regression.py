@@ -1,11 +1,12 @@
 import pandas as pd
-import quandl, math, datetime, pickle
+import quandl, math, datetime, pickle, warnings
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn import preprocessing, cross_validation, svm
 from sklearn.linear_model import LinearRegression
 from matplotlib import style
 
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 style.use('ggplot')
 
 try:
@@ -46,26 +47,52 @@ df.fillna(-99999, inplace=True)
 # we gonna try to predict out 1% of dataframe 
 
 forecast_out = int(math.ceil(0.001*len(df)))
+# print(forecast_out)
+# quit()
 
-df['label'] = df[forecast_col].shift(-forecast_out)
+# df['label'] = df[forecast_col].shift(-forecast_out)
 
 # if we wnat to print the tail
 # we'll need to drop the 'na's before
 # df.dropna(inplace=True)
+
+# last_date = df.iloc[-1].name
+# last_unix = last_date.timestamp()
+# one_day = 86400
+# next_unix = last_unix + one_day
+
+# for i in forecast_set:
+#     next_date = datetime.datetime.fromtimestamp(next_unix)
+#     next_unix += one_day
+#     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
+
+
+
 # print(df.tail())
+# print(last_date)
+# quit()
 
-
-X = np.array(df.drop(['label'], 1))
+X = np.array(df.drop(['Adj. Close'], 1))
 X = preprocessing.scale(X)
 X_lately = X[-forecast_out:]
+
+# print(last_unix)
+# print('o')
+# quit()
+
+# X_lately
+# [[ 1.63788031 -1.63575383 -0.53357709]
+#  [ 2.51713951 -1.55184968 -0.65539548]
+#  [-0.50488861  0.23733959 -0.55124957]
+#  [ 4.10537475 -3.54051775 -0.59144015]]
 
 # we made that shift so here we want to
 # make sure that we only have X's where
 # we have values for y
-X = X[:-forecast_out]
+# X = X[:-forecast_out]
 
 df.dropna(inplace=True)
-y = np.array(df['label'])
+y = np.array(df['Adj. Close'])
 
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
