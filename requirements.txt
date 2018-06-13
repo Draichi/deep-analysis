@@ -1,4 +1,5 @@
 quandl
 numpy
 pandas
+termcolor
 plotly

@@ -210,3 +210,4 @@ df_scatter(
     y_axis_label='Coin Value (USD)',
     scale='log'
 )
+# combined_df.to_csv('datasets/altcoins_joined_closes.csv')
