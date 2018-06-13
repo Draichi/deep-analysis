@@ -1,33 +1,42 @@
 import numpy as np 
 import pandas as pd
 from collections import Counter 
-import pickle
+import pickle, warnings
 from sklearn import svm, model_selection, neighbors
 from sklearn.ensemble import VotingClassifier, RandomForestClassifier
 from termcolor import cprint
+
+warnings.filterwarnings("ignore", category=DeprecationWarning)
 
 #------------------------------------------------------------->
 HOW_MANY_DAYS      = 7
 REQUIREMENT        = 0.05
 DATABASE           = 'datasets/altcoins_joined_closes.csv'
-COIN               = 'BTC'
+COIN               = 'ETH'
 DATABASE_INDEX_COL = 0
 #------------------------------------------------------------->
 df = pd.read_csv(DATABASE, index_col=DATABASE_INDEX_COL)
 tickers = df.columns.values
 df.fillna(0, inplace=True)
 #------------------------------------------------------------->
-
+cprint(
+    '\n\n              {} changing {}% in {} days:\n\n'.format(
+        COIN, 
+        REQUIREMENT*100, 
+        HOW_MANY_DAYS
+    ), 
+    'yellow'
+)
 #------------------------------------------------------------->
 def buy_sell_hold(*args):
     cols = [c for c in args]
     
     for col in cols:
         if col > REQUIREMENT:
-            return 1
+            return 'BUY'
         if col < -REQUIREMENT:
-            return -1
-    return 0
+            return 'SELL'
+    return 'HOLD'
 
 #------------------------------------------------------------->
 def process_data_for_labels(ticker):
