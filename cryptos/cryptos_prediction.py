@@ -20,7 +20,7 @@ args = parser.parse_args()
 #------------------------------------------------------------->
 HOW_MANY_DAYS      = args.days
 REQUIREMENT        = args.change
-DATABASE           = 'datasets/altcoins_joined_closes.csv'
+DATABASE           = 'datasets/altcoins_joined_closes_20181405.csv'
 COIN               = args.coin
 DATABASE_INDEX_COL = 0
 #------------------------------------------------------------->
