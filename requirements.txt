@@ -3,3 +3,5 @@ numpy
 pandas
 termcolor
 plotly
+https://github.com/matplotlib/mpl_finance/archive/master.zip
+pandas_datareader
