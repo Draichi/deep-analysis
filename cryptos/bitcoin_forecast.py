@@ -43,18 +43,12 @@ df['PCT_Change'] = (df['Close'] - df['Open']) / df['Open'] * 100
 df.fillna(-99999, inplace = True)
 
 # print(df.tail())
+# quit()
 
-last_date = df.iloc[-1].name
-lastdate = dt.datetime.fromtimestamp(1528858800.0)
-
-last_unix = last_date.timestamp()
-one_day = 86400
-next_unix = last_unix + one_day
-
-print('timestamp', lastdate)
-print('last_date', last_date)
-print('last_unix',last_unix)
-print('next_unix',next_unix)
+# print('timestamp', lastdate)
+# print('last_date', last_date)
+# print('last_unix',last_unix)
+# print('next_unix',next_unix)
 # quit()
 # for i in range(3):
 #     next_date = dt.datetime.fromtimestamp(next_unix)
@@ -63,22 +57,40 @@ print('next_unix',next_unix)
 #     df.loc[next_date] = [np.nan for _ in range(len(df.columns))]
 #     print(df.loc[next_date])
 
-x_df = df.drop(['Close'], 1)
-# print(x_df.tail())
-print(x_df.loc[dt.datetime.date(last_date)])
-print(x_df.tail())
-quit()
 
-X = np.array(df.drop(['Close'], 1))
+# print(x_df.tail())
+# next_date = dt.datetime.fromtimestamp(next_unix)
+# [np.nan for _ in range(len(df.columns)-1)] + [i]
+# print(x_df.loc[next_date])
+# print(x_df.tail())
+# quit()
+
+# -------
+# adding a row
+# df2 = pd.DataFrame(columns=['lib', 'qty1', 'qty2'])
+# for i in range(5):
+#     df2.loc[i] = [np.random.randint(-1,1) for n in range(3)]
+# print(df2)
+
+# -------
+
+x_df = df.drop(['Close'], 1)
+y_df = df['Close']
+
+X = np.array(x_df)
 X = preprocessing.scale(X)
 
 df.dropna(inplace=True)
 
-y = np.array(df['Close'])
+y = np.array(y_df)
+
+# print('x',X[0:10])
+# print('y',y[0:10])
+# quit()
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
 
-clf = LinearRegression(n_jobs=10)
+clf = LinearRegression(n_jobs=3)
 clf.fit(X_train, y_train)
 with open('datasets/bitstamp.pkl', 'wb') as f:
     pickle.dump(clf, f)
@@ -86,10 +98,43 @@ with open('datasets/bitstamp.pkl', 'wb') as f:
 # pickle_in = open('datasets/bitstamp.pkl', 'rb')
 # clf = pickle.load(pickle_in)
 
-next_days
-
 
 accuracy = clf.score(X_test, y_test)
+
+print('accuracy', accuracy)
+
+
+last_date = df.iloc[-1].name
+# print(last_date)
+# quit()
+lastdate = dt.datetime.fromtimestamp(1528858800.0)
+
+last_unix = last_date.timestamp()
+one_day = 86400
+next_unix = last_unix + one_day*2
+
+
+x_df_predict = x_df[-3:]
+# print(x_df_predict)
+# for i in range(len(x_df_predict)):
+    
+# quit()
+
+for i in range(3):
+    next_date = dt.datetime.fromtimestamp(next_unix)
+    # print('next date', next_date)
+    next_unix += one_day
+    # x_df_predict.loc[next_date] = [np.nan for _ in range(len(x_df_predict.columns))]
+    x_df_predict[next_date] = x_df_predict['Open'][i]
+    print(x_df_predict[next_date])
+    # print(x_df_predict.loc[next_date])
+print(x_df_predict.tail())
+quit()
+predict = clf.predict([
+
+])
+
+quit()
 forecast_set = clf.predict(next_days)
 
 quit()
