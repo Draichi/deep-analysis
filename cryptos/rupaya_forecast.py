@@ -19,11 +19,11 @@ style.use('ggplot')
 # RUPX/USD
 df = pd.read_csv('datasets/rupaya_11-08-2017_16-05-2018.csv', decimal=",")
 
-df = df[['Data','Open', 'High', 'Low', 'Close', 'Volume',]]
+# df = df[['Data','Open', 'High', 'Low', 'Close', 'Volume',]]
 
-print(df.head())
-print(df.tail())
-quit()
+# print(df.head())
+# print(df.tail())
+# quit()
 
 # High x Low percent
 df['HL_PCT'] = (df['High'] - df['Close']) / df['Close'] * 100.0
@@ -43,32 +43,25 @@ forecast_col = 'Close'
 # fill 'not avaible' data with -99999
 df.fillna(-99999, inplace=True)
 
-# let's say the length of df was a number that was
-# return a decimal point like 0.2,
-# math.ceil will round that up to 1 (float)
-# this will be the number of days out,
-# we gonna try to predict out 1% of dataframe 
-forecast_out = int(math.ceil(0.01*len(df)))
-
-# We shift the column negatively, this way, the label 
-# columns for each row will be adjusted close price
-# 10% (dataframe) into future
-df['label'] = df[forecast_col].shift(-forecast_out)
+df['label'] = df[forecast_col].shift(1)
 
 # if we wnat to print the tail
 # we'll need to drop the 'na's before
-# df.dropna(inplace=True)
+df.dropna(inplace=True)
+# print(df.head())
 # print(df.tail())
+# print(df[-2:-1].drop(['label'], 1))
+# quit()
 
 X = np.array(df.drop(['label'], 1))
-X = preprocessing.scale(X)
+# X = preprocessing.scale(X)
 
-X_lately = X[-forecast_out:]
+# X_lately = X[-forecast_out:]
 # we made that shift so here we want to
 # make sure that we only have X's where
 # we have values for y
 df.dropna(inplace=True)
-X = X[:-forecast_out]
+# X = X[:-forecast_out]
 
 y = np.array(df['label'])
 
@@ -77,56 +70,52 @@ y = np.array(df['label'])
 # between X's and y's
 X_train, X_test, y_train, y_test = cross_validation.train_test_split(X, y, test_size=0.2)
 
-
-
 ################
 
-# Uncomment this black to train
-# data every time
-
-# # classifier:
-# # n_jobs=10 will run 10 jobs at a time
-# # n_jobs=-1 will run as many jobs as possible
-# clf = LinearRegression(n_jobs=10)
-# # clf = svm.SVR()
-# # fit is synonimus of train
-# clf.fit(X_train, y_train)
-# # we pickle here to avoid to train everytime
-# with open('rupx.pickle', 'wb') as f:
-#     pickle.dump(clf, f)
-
+# classifier:
+# n_jobs=10 will run 10 jobs at a time
+# n_jobs=-1 will run as many jobs as possible
+clf = LinearRegression(n_jobs=10)
+# clf = svm.SVR()
+# fit is synonimus of train
+clf.fit(X_train, y_train)
+# we pickle here to avoid to train everytime
+with open('rupx.pickle', 'wb') as f:
+    pickle.dump(clf, f)
 
 ##################
 
-
 # load the alredy trained data
-pickle_in = open('rupx.pickle', 'rb')
-clf = pickle.load(pickle_in)
+# pickle_in = open('rupx.pickle', 'rb')
+# clf = pickle.load(pickle_in)
 
 # score is synonimus of test
 accuracy = clf.score(X_test, y_test)
-forecast_set = clf.predict(X_lately)
-# print(forecast_set)
-print('\x1b[1;33;40m   ---  Accuracy:', accuracy, '\x1b[0m')
-print('\x1b[1;33;40m   ---  Forecast out:', forecast_out, 'days \x1b[0m')
-
-df['Forecast'] = np.nan
-
-last_date = df.iloc[-1].Data
-last_unix = last_date.timestamp()
-one_day = 86400
-next_unix = last_unix + one_day
-
-for i in forecast_set:
-    next_date = datetime.datetime.fromtimestamp(next_unix)
-    next_unix += one_day
-    df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
-
+row = df[-2:-1].drop(['label'], 1)
+predict_this = np.array(row)
+forecast_set = clf.predict(predict_this)
 # print(df.tail())
 
-df['Close'].plot()
-df['Forecast'].plot()
-plt.legend(loc=4)
-plt.xlabel('Date')
-plt.ylabel('Price')
-plt.show()
+print(predict_this, forecast_set)
+print(X[-2:-1], y[-2:-1])
+print('\x1b[1;33;40m   ---  Accuracy:', accuracy, '\x1b[0m')
+quit()
+
+# df['Forecast'] = np.nan
+
+# last_date = df.iloc[-1].Data
+# last_unix = last_date.timestamp()
+# one_day = 86400
+# next_unix = last_unix + one_day
+
+# for i in forecast_set:
+#     next_date = datetime.datetime.fromtimestamp(next_unix)
+#     next_unix += one_day
+#     df.loc[next_date] = [np.nan for _ in range(len(df.columns)-1)] + [i]
+
+
+# df['Close'].plot()
+# plt.legend(loc=4)
+# plt.xlabel('Date')
+# plt.ylabel('Price')
+# plt.show()
