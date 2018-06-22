@@ -105,7 +105,7 @@ def df_scatter(df,
         trace_arr = []
         for index, series in enumerate(series_arr):
             trace = go.Scatter(
-                x=series.index,
+                x=series.index*1000,
                 y=series,
                 name=label_arr[index],
                 visible=visibility
@@ -146,7 +146,7 @@ def get_json_data(json_url, path):
     return df
 
 
-base_url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency={}&days={}'
+base_url = 'https://graviex.net/api/v2/k.json?market={}'
 start_date = datetime.strptime('2015-01-01', '%Y-%m-%d')
 currency = 'usd'
 days=1
@@ -157,16 +157,16 @@ user_agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/
 
 def get_crypto_data(coin_name):
     # retrive crypto data from poloniex
-    json_url = base_url.format(coin_name, currency, days)
+    json_url = base_url.format(coin_name)
     req = Request(str(json_url), data=None, headers={'User-Agent': user_agent})
     webpage = urlopen(req).read()
-    print(webpage)
-    quit()
+    # print(webpage)
+    # quit()
     data_df = get_json_data(json_url, coin_name)
-    data_df = data_df.set_index('date')
+    data_df = data_df.set_index(0)
     return data_df
 
-altcoins = ['bitcoin', 'rapture', 'rupaya']
+altcoins = ['winobtc', 'giobtc']
 
 altcoin_data ={}
 for altcoin in altcoins:
@@ -178,14 +178,14 @@ for altcoin in altcoins:
 #     altcoin_data[altcoin]['Price_USD'] = altcoin_data[altcoin]['weightedAverage'] * btc_usd_datasets['MEAN_PRICE']
 
 
-print(df.tail())
-print(altcoin_data)
-quit()
+# print(crypto_price_df.tail())
+# # print(altcoin_data)
+# quit()
 # merge USD price of each altcoin into single dataframe
-combined_df = merge_dfs_on_column(list(altcoin_data.values()), list(altcoin_data.keys()), 'Price_USD')
+combined_df = merge_dfs_on_column(list(altcoin_data.values()), list(altcoin_data.keys()), 3)
 
 # add BTC price to the dataframe
-combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
+# combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
 
 # scale can be 'linear' or 'log'
 # df_scatter(combined_df,
@@ -194,14 +194,14 @@ combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
 #            y_axis_label='Coin Value (USD)',
 #            scale='log')
 
-combined_df_2016 = combined_df[combined_df.index.year == 2016]
-combined_df_2016.pct_change().corr(method='pearson')
+# combined_df_2016 = combined_df[combined_df.index.year == 2016]
+# combined_df_2016.pct_change().corr(method='pearson')
 
-combined_df_2017 = combined_df[combined_df.index.year == 2017]
-combined_df_2017.pct_change().corr(method='pearson')
+# combined_df_2017 = combined_df[combined_df.index.year == 2017]
+# combined_df_2017.pct_change().corr(method='pearson')
 
-combined_df_2018 = combined_df[combined_df.index.year == 2018]
-combined_df_2018.pct_change().corr(method='pearson')
+# combined_df_2018 = combined_df[combined_df.index.year == 2018]
+# combined_df_2018.pct_change().corr(method='pearson')
 
 def correlation_heatmap(df, title, absolute_bounds=True):
     '''plot a correlation heatmap for the entire dataframe'''
@@ -233,6 +233,6 @@ df_scatter(
     'CRYPTO PRICES (USD)',
     separate_y_axis=False,
     y_axis_label='Coin Value (USD)',
-    scale='log'
+    scale='linear'
 )
-combined_df.to_csv('datasets/altcoins_joined_closes_20181405_.csv')
+# combined_df.to_csv('datasets/altcoins_joined_closes_20181405_.csv')
