@@ -129,7 +129,7 @@ def df_scatter(df,
         )
         
 
-def get_json_data(json_url, path):
+def get_json_data(json_url):
     # download and cache json data, return as dataframe
     # pkl = '{}.pkl'.format(path)
     # cache_path = 'datasets/' + pkl
@@ -146,7 +146,7 @@ def get_json_data(json_url, path):
     return df
 
 
-base_url = 'https://graviex.net/api/v2/k.json?market={}'
+base_url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=usd&days=1'
 start_date = datetime.strptime('2015-01-01', '%Y-%m-%d')
 currency = 'usd'
 days=1
@@ -158,15 +158,15 @@ user_agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/
 def get_crypto_data(coin_name):
     # retrive crypto data from poloniex
     json_url = base_url.format(coin_name)
-    req = Request(str(json_url), data=None, headers={'User-Agent': user_agent})
+    req = Request(json_url, headers={'User-Agent': 'Mozilla/5.0'})
     webpage = urlopen(req).read()
     # print(webpage)
     # quit()
-    data_df = get_json_data(json_url, coin_name)
-    data_df = data_df.set_index(0)
+    data_df = get_json_data(webpage)
+    # data_df = data_df.set_index(0)
     return data_df
 
-altcoins = ['winobtc', 'giobtc']
+altcoins = ['absolute', 'rupaya']
 
 altcoin_data ={}
 for altcoin in altcoins:
@@ -179,10 +179,14 @@ for altcoin in altcoins:
 
 
 # print(crypto_price_df.tail())
-# # print(altcoin_data)
+# print(altcoin_data)
 # quit()
 # merge USD price of each altcoin into single dataframe
-combined_df = merge_dfs_on_column(list(altcoin_data.values()), list(altcoin_data.keys()), 3)
+combined_df = merge_dfs_on_column(
+    list(altcoin_data.values()), 
+    list(altcoin_data.keys()),
+    0
+)
 
 # add BTC price to the dataframe
 # combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
@@ -227,7 +231,7 @@ def correlation_heatmap(df, title, absolute_bounds=True):
         image_filename = title
     )
 
-# correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")
+correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")
 df_scatter(
     combined_df,
     'CRYPTO PRICES (USD)',
@@ -235,4 +239,4 @@ df_scatter(
     y_axis_label='Coin Value (USD)',
     scale='linear'
 )
-# combined_df.to_csv('datasets/altcoins_joined_closes_20181405_.csv')
+combined_df.to_csv('datasets/gekkp.csv')
