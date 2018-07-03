@@ -12,18 +12,17 @@
 <!-- https://blog.patricktriest.com/analyzing-cryptocurrencies-python/ -->
 
 ```sh
-$ git clone https://github.com/Draichi/deep-analysis.git
-$ cd deep-analysis
+git clone https://github.com/Draichi/deep-analysis.git
 
-$ conda create --name cryptocurrency-analysis python=3
-
-$ source activate cryptocurrency-analysis
-
-$ conda install numpy pandas nb_conda jupyter plotly quandl
+cd deep-analysis
 
 pip install -r requeriments.txt
 
-$ jupyter notebook
+python cryptos/deep_analysis.py
+# a window will pop-up with the chart
+
+python cryptos/cryptos_prediction.py -d 7 -c 0.02 -$ BTC
+# or python cryptos/cryptos_prediction.py --help
 
 ```
 
@@ -34,8 +33,3 @@ $ jupyter notebook
 </div>
 
 ------------
-
-##### to install the theme chesterish on jupyter notebook:
-
-- `pip install jupyterthemes`
-- `jt -t chesterish`

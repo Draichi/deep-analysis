@@ -3,6 +3,7 @@
 
 *.pickle
 *.pkl
+*.csv
 
 /stock_dfs
 /node_modules

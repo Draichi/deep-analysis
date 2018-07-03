@@ -1,5 +1,7 @@
 quandl
 numpy
+sklearn
+scipy
 pandas
 termcolor
 plotly
