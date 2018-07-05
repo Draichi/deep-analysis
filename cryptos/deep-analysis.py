@@ -202,10 +202,10 @@ def correlation_heatmap(df, title, absolute_bounds=True):
         image_filename = title
     )
 
-# correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")
+correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")
 df_scatter(
     combined_df,
-    'CRYPTO PRICES (USD)',
+    'logarithm PRICES (USD)',
     separate_y_axis=False,
     y_axis_label='Coin Value (USD)',
     scale='log'
