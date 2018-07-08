@@ -7,67 +7,12 @@ import plotly.figure_factory as ff
 from datetime import datetime
 from urllib.request import Request, urlopen
 
-
-
-
-    
-# merge USD price of each altcoin into single dataframe
-# combined_df = merge_dfs_on_column(list(altcoin_data.values()), list(altcoin_data.keys()), 'Price_USD')
-
-# # add BTC price to the dataframe
-# combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
-
-
-
-# --------------------------------------------------------------->
-# data source:
-# https://blog.quandl.com/api-for-bitcoin-data
-# def get_quandl_data(quandl_id):
-#     path = '{}.pkl'.format(quandl_id).replace('/','-')
-#     cache_path = 'datasets/' + path
-#     try:
-#         f = open(cache_path, 'rb')
-#         df = pickle.load(f)
-#         print('-- loaded {} from cache'.format(quandl_id))
-#     except (OSError, IOError) as e:
-#         print('-- downloading {} from quandl'.format(quandl_id))
-#         df = quandl.get(quandl_id, returns="pandas")
-#         df.to_pickle(cache_path)
-#         print('-- cached {} at {}'.format(quandl_id, cache_path))
-#     return df
-
-# # --------------------------------------------------------------->
-# # gettin pricing data for 3more BTC exchanges
-# exchanges = ['COINBASE', 'BITSTAMP', 'ITBIT', 'KRAKEN']
-# exchange_data = {}
-
-# for exchange in exchanges:
-#     exchange_code = 'BCHARTS/{}USD'.format(exchange)
-#     btc_exchange_df = get_quandl_data(exchange_code)
-#     exchange_data[exchange] = btc_exchange_df
-
-# --------------------------------------------------------------->
-# merge a single column of each dataframe
-def merge_dfs_on_column(dataframes, labels, col):
+def merge_dfs_on_column(dataframes, labels):
     series_dict = {}
     for index in range(len(dataframes)):
-        series_dict[labels[index]] = dataframes[index][col]
+        series_dict[labels[index]] = dataframes[index]
     return pd.DataFrame(series_dict)
 
-# --------------------------------------------------------------->
-# merge BTC price dataseries into a single dataframe
-# btc_usd_datasets = merge_dfs_on_column(
-#     list(exchange_data.values()),
-#     list(exchange_data.keys()),
-#     'Weighted Price'
-# )
-# btc_usd_datasets.replace(0, np.nan, inplace=True)
-# btc_usd_datasets['MEAN_PRICE'] = btc_usd_datasets.mean(axis=1)
-# uncomment the folowing to see the merged data
-#btc_usd_datasets.tail()
-
-# --------------------------------------------------------------->
-# generate a scatter plot of the entire dataframe
 def df_scatter(df,
                 title,
                 separate_y_axis=False,
@@ -128,23 +73,9 @@ def df_scatter(df,
             image_filename = title
         )
         
-
 def get_json_data(json_url):
-    # download and cache json data, return as dataframe
-    # pkl = '{}.pkl'.format(path)
-    # cache_path = 'datasets/' + pkl
-    # try:
-    #     f = open(pkl, 'rb')
-    #     df = pickle.load(f)
-    #     print('-- loaded {} from cache'.format(path))
-    # except (OSError, IOError) as e:
-    #     print('-- downloading {}'.format(path))
-    #     df = pd.read_json(json_url)
-    #     df.to_pickle(pkl)
-    #     print('-- cached {} at {}'.format(json_url, pkl))
     df = pd.read_json(json_url)
     return df
-
 
 base_url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=usd&days=1'
 start_date = datetime.strptime('2015-01-01', '%Y-%m-%d')
@@ -163,49 +94,53 @@ def get_crypto_data(coin_name):
     # print(webpage)
     # quit()
     data_df = get_json_data(webpage)
-    # data_df = data_df.set_index(0)
+    # data_df = data_df.set_index('prices')
     return data_df
 
-altcoins = ['absolute', 'rupaya']
+altcoins = ['absolute']
 
 altcoin_data ={}
+df_test ={} 
 for altcoin in altcoins:
     # coinpair = 'BTC_{}'.format(altcoin)
     crypto_price_df = get_crypto_data(altcoin)
-    altcoin_data[altcoin] = crypto_price_df
-    
-# for altcoin in altcoin_data.keys():
-#     altcoin_data[altcoin]['Price_USD'] = altcoin_data[altcoin]['weightedAverage'] * btc_usd_datasets['MEAN_PRICE']
+    # web = crypto_price_df['prices']
+    # for price in web:
+    altcoin_data[altcoin] = crypto_price_df['prices']
 
-
-# print(crypto_price_df.tail())
+    for date, price in altcoin_data[altcoin]:
+        # print(idx, item)
+        df_test[date] = price
+    #     altcoin_data[altcoin]['Date'] = price[0]
+# print(list(df_test.keys()))
+# quit()
+df_ = pd.DataFrame.from_dict({'date': list(df_test.keys()), 'price': list(df_test.values())})
+# df_.index.name = 'date'
+# df_.reset_index()
+df_.to_csv('test2.csv')
+print(df_.tail())
+quit()
+# df = pd.DataFrame(altcoin_data)
+# df.to_csv("test.csv")
+print(altcoin_data['absolute'])
+quit()
 # print(altcoin_data)
 # quit()
-# merge USD price of each altcoin into single dataframe
+# for altcoin in altcoin_data.keys():
+#     # print('altcoin:', altcoin)
+#     for item in altcoin_data[altcoin]:
+        # print('item:',item[1])
+        
+        # altcoin_data[altcoin]['Price_BTC'] = item[1]
+# quit()
+# print(list(altcoin_data.values()))
+# print(list(altcoin_data.keys()))
+# quit()
+
 combined_df = merge_dfs_on_column(
     list(altcoin_data.values()), 
-    list(altcoin_data.keys()),
-    0
+    list(altcoin_data.keys())
 )
-
-# add BTC price to the dataframe
-# combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
-
-# scale can be 'linear' or 'log'
-# df_scatter(combined_df,
-#            'CRYPTO PRICES (USD)',
-#            separate_y_axis=False,
-#            y_axis_label='Coin Value (USD)',
-#            scale='log')
-
-# combined_df_2016 = combined_df[combined_df.index.year == 2016]
-# combined_df_2016.pct_change().corr(method='pearson')
-
-# combined_df_2017 = combined_df[combined_df.index.year == 2017]
-# combined_df_2017.pct_change().corr(method='pearson')
-
-# combined_df_2018 = combined_df[combined_df.index.year == 2018]
-# combined_df_2018.pct_change().corr(method='pearson')
 
 def correlation_heatmap(df, title, absolute_bounds=True):
     '''plot a correlation heatmap for the entire dataframe'''
@@ -231,7 +166,7 @@ def correlation_heatmap(df, title, absolute_bounds=True):
         image_filename = title
     )
 
-correlation_heatmap(combined_df_2018.pct_change(), "Correlation 2018")
+correlation_heatmap(combined_df.pct_change(), "Correlation 2018")
 df_scatter(
     combined_df,
     'CRYPTO PRICES (USD)',
