@@ -3,6 +3,9 @@ import datetime
 import plotly.offline as offline
 import plotly.graph_objs as go
 
+# https://plot.ly/python/time-series/
+
+
 df = pd.read_csv('ali.csv')
 # df['index'] = df['prices']
 for i, item in enumerate(df['prices']):
