@@ -158,6 +158,7 @@ user_agent = 'Mozilla/5.0 (iPhone; CPU iPhone OS 5_0 like Mac OS X) AppleWebKit/
 def get_crypto_data(coin_name):
     # retrive crypto data from poloniex
     json_url = base_url.format(coin_name)
+    print('-- downloading {}'.format(coin_name))
     req = Request(json_url, headers={'User-Agent': 'Mozilla/5.0'})
     webpage = urlopen(req).read()
     # print(webpage)
@@ -166,7 +167,7 @@ def get_crypto_data(coin_name):
     # data_df = data_df.set_index(0)
     return data_df
 
-altcoins = ['absolute', 'rupaya']
+altcoins = ['rupaya']
 
 altcoin_data ={}
 for altcoin in altcoins:
@@ -187,6 +188,10 @@ combined_df = merge_dfs_on_column(
     list(altcoin_data.keys()),
     0
 )
+combined_df.to_pickle('tst.pkl')
+
+print(combined_df)
+quit()
 
 # add BTC price to the dataframe
 # combined_df['BTC'] = btc_usd_datasets['MEAN_PRICE']
