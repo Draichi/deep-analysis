@@ -7,7 +7,7 @@ import pandas as pd
 
 # https://plot.ly/python/time-series/
 
-coins = ['fantasy-gold', 'rupaya']
+coins = ['giant']
 keys = ['prices', 'market_caps', 'total_volumes']
 
 def get_coin_data(coin):
@@ -21,7 +21,7 @@ def get_coin_data(coin):
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers)
         df = pd.DataFrame(response.json())
-        df.to_csv('{}.csv'.format(coin))
+        df.to_csv('{}.csv'.format(coin), index=False)
         print('--- caching {}'.format(coin))
     return df
 
@@ -36,15 +36,25 @@ def get_df(item, coin, key):
 
 
 coin_data = {}
-
 for coin in coins:
     data = get_coin_data(coin)
-    coin_data[coin] = data
-    
+    data.name = coin
+    print(data.name)
+    # print(data)
+    # quit()
+    # coin_data[coin] = data
+    # print(data)
     for key in keys:
-        for item in coin_data[coin][key]:
-            df = get_df(item, coin, key)
-            
+        print(key)
+        for i, item in enumerate(data[key]):
+            current_item = item.replace('[', '').replace(']', '').split(',')
+            date = current_item[0]
+            price = current_item[1]
+            dt = datetime.datetime.fromtimestamp(int(date)/1000).strftime('%Y-%m-%d %H:%M:%S')
+            data.loc[i, 'date'] = dt
+            data.loc[i, key] = price
+    coin_data[coin] = data
+    df = pd.DataFrame(coin_data['giant'])
 print(df)
 quit()
 trace_price = go.Scatter(
