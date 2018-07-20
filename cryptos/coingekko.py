@@ -7,7 +7,7 @@ import pandas as pd
 
 # https://plot.ly/python/time-series/
 
-coins = ['giant']
+coins = ['giant', 'rupaya']
 keys = ['prices', 'market_caps', 'total_volumes']
 
 def get_coin_data(coin):
@@ -24,16 +24,6 @@ def get_coin_data(coin):
         df.to_csv('{}.csv'.format(coin), index=False)
         print('--- caching {}'.format(coin))
     return df
-
-def get_df(item, coin, key):
-    current_item = item.replace('[', '').replace(']', '').split(',')
-    date = current_item[0]
-    val = current_item[1]
-    dt = datetime.datetime.fromtimestamp(int(date)/1000).strftime('%Y-%m-%d %H:%M:%S')
-    coin_data[coin]['date'] = dt
-    coin_data[coin][key] = val
-    return pd.DataFrame(coin_data[coin], index=[0])
-
 
 coin_data = {}
 for coin in coins:
@@ -89,8 +79,15 @@ for coin in coins:
 # )
 
 # data = [trace_cap, trace_price]
+layout = go.Layout(
+    plot_bgcolor='#010008',
+    paper_bgcolor='#010008',
+    yaxis=dict(
+        type='log'
+    )
+)
 
-offline.plot(data)
+offline.plot({'data': data, 'layout': layout})
 
 
 
