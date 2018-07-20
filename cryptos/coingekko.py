@@ -55,27 +55,40 @@ for coin in coins:
             data.loc[i, key] = price
     coin_data[coin] = data
     df = pd.DataFrame(coin_data[coin])
-print(df)
-quit()
-trace_price = go.Scatter(
-    x=df['fantasy-gold']['date'],
-    y=df['fantasy-gold']['prices'],
-    name = "fantasy-gold prices",
-)
+    df.to_csv('df_{}.csv'.format(coin), index=False)
 
-trace_cap = go.Scatter(
-    x=coin_data['fantasy-gold']['date'],
-    y=coin_data['fantasy-gold']['market_caps'],
-    name = "fantasy-gold caps",
-)
+data = []
+for coin in coins:
+    df = pd.read_csv('df_{}.csv'.format(coin))
+    trace = go.Scatter(
+        x=df['date'],
+        y=df['prices'],
+        name = coin,
+    )
+    data.append(trace)
 
-trace_vol = go.Scatter(
-    x=coin_data['rupaya']['date'],
-    y=coin_data['rupaya']['prices'],
-    name = "rupaya prices",
-)
+# print(data)
+# quit()
 
-data = [trace_cap, trace_price]
+# trace_price = go.Scatter(
+#     x=df['fantasy-gold']['date'],
+#     y=df['fantasy-gold']['prices'],
+#     name = "fantasy-gold prices",
+# )
+
+# trace_cap = go.Scatter(
+#     x=coin_data['fantasy-gold']['date'],
+#     y=coin_data['fantasy-gold']['market_caps'],
+#     name = "fantasy-gold caps",
+# )
+
+# trace_vol = go.Scatter(
+#     x=coin_data['rupaya']['date'],
+#     y=coin_data['rupaya']['prices'],
+#     name = "rupaya prices",
+# )
+
+# data = [trace_cap, trace_price]
 
 offline.plot(data)
 
