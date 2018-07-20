@@ -17,7 +17,7 @@ def get_coin_data(coin):
         print('--- loading {} from cache'.format(coin))
     except (OSError, IOError) as e:
         print('--- downloading {}'.format(coin))
-        url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=usd&days=1'.format(coin)
+        url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=btc&days=max'.format(coin)
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers)
         df = pd.DataFrame(response.json())
