@@ -54,7 +54,7 @@ for coin in coins:
             data.loc[i, 'date'] = dt
             data.loc[i, key] = price
     coin_data[coin] = data
-    df = pd.DataFrame(coin_data['giant'])
+    df = pd.DataFrame(coin_data[coin])
 print(df)
 quit()
 trace_price = go.Scatter(
