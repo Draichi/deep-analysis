@@ -43,7 +43,7 @@ for coin in coins:
 
 data = []
 for coin in coins:
-    df = pd.read_csv('df_{}.csv'.format(coin))
+    df = pd.read_csv('df_{}-{}-{}.csv'.format(coin, todays_day, todays_month))
     trace = go.Scatter(
         x=df['date'],
         y=df['prices'],
