@@ -1,37 +1,37 @@
 import pandas as pd
-import datetime
 import plotly.offline as offline
 import plotly.graph_objs as go
-import requests
+import requests, datetime
 import pandas as pd
 
 # https://plot.ly/python/time-series/
 
-coins = ['giant', 'rupaya']
+coins = ['giant', 'rupaya', 'hush', 'fantasy-gold', 'ethereum']
 keys = ['prices']
+todays_month = datetime.datetime.now().month
+todays_day = datetime.datetime.now().day
 
 def get_coin_data(coin):
     try:
-        f = open('{}.csv'.format(coin), 'rb')
-        df = pd.read_csv(f)
+        df = pd.read_csv('{}-{}-{}.csv'.format(coin, todays_day, todays_month))
         print('--- loading {} from cache'.format(coin))
     except (OSError, IOError) as e:
         print('--- downloading {}'.format(coin))
-        url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=btc&days=max'.format(coin)
+        url = 'https://api.coingecko.com/api/v3/coins/{}/market_chart?vs_currency=btc&days=1'.format(coin)
         headers = {'User-Agent': 'Mozilla/5.0'}
         response = requests.get(url, headers=headers)
         df = pd.DataFrame(response.json())
-        df.to_csv('{}.csv'.format(coin), index=False)
+        df.to_csv('{}-{}-{}.csv'.format(coin, todays_day, todays_month), index=False)
         print('--- caching {}'.format(coin))
     return df
 
 coin_data = {}
 for coin in coins:
     data = get_coin_data(coin)
-    data.name = coin
     for key in keys:
         for i, item in enumerate(data[key]):
-            current_item = item.replace('[', '').replace(']', '').split(',')
+            str_item = str(item)
+            current_item = str_item.replace('[', '').replace(']', '').split(',')
             date = current_item[0]
             price = current_item[1]
             dt = datetime.datetime.fromtimestamp(int(date)/1000).strftime('%Y-%m-%d %H:%M:%S')
@@ -39,7 +39,7 @@ for coin in coins:
             data.loc[i, key] = price
     coin_data[coin] = data
     df = pd.DataFrame(coin_data[coin])
-    df.to_csv('df_{}.csv'.format(coin), index=False)
+    df.to_csv('df_{}-{}-{}.csv'.format(coin, todays_day, todays_month), index=False)
 
 data = []
 for coin in coins:
