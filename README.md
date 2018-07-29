@@ -1,5 +1,7 @@
 # Deep analysis w/ cryptocurrency
 
+https://stackoverflow.com/questions/50394873/import-pandas-datareader-gives-importerror-cannot-import-name-is-list-like
+
 ![python](https://forthebadge.com/images/badges/made-with-python.svg "python")
 
 ## Build setup for deep-analysis
